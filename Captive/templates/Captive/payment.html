@@ -1,0 +1,55 @@
+{%extends "base/main.html"%}
+{%block title%}Payment{%endblock%}
+{%load static%}
+
+{%block extra_css%}
+<link rel="stylesheet" href="{% static 'Captive/pay.css' %}">
+<link rel="icon" href="{% static 'Captive/images/favicon.ico' %}" type="image/x-icon">
+{%endblock%}
+
+
+
+{%block content%}
+<center>
+    <form method="POST" action="{% url 'paid' %}" id="paymentForm">
+        {% csrf_token %}
+        {{form}}
+        <h2>Enter Safaricom number to complete payment:</h2>
+        <input type="tel" id="phone_number" name="phone_number" placeholder="0712345678" maxlength="10">
+        <p>You're about to pay: <b>{{ plan_price }} KES</b></p>
+        
+        <input type="hidden" name="planamount" value="{{ plan_price}}">
+        <input type="hidden" name="planid", value="{{plan.id}}">
+        <input type="hidden" name="planduration" value="{{ plan_duration }}">
+        {% if error_message %}
+            <p style="color: red;">{{ error_message }}</p>
+        {% endif %}
+        
+        <br><br>
+        <input type="submit" value="Confirm Payment">
+    </form>
+</center>
+{%block extra_js%}
+<script>
+    // Wait for DOM to load
+    document.addEventListener("DOMContentLoaded", function() {
+        // Get form by ID
+        const form = document.getElementById("paymentForm");
+        
+        form.addEventListener("submit", function(event) {
+            const phoneNumber = document.getElementById("phone_number").value.trim();
+            
+            if (!phoneNumber) {
+                alert("Phone number is required to proceed with payment.");
+                event.preventDefault();
+            }
+            // Optional: Add Safaricom number format validation
+            else if (!/^07|01\d{8}$/.test(phoneNumber)) {
+                alert("Please enter a valid Safaricom number (e.g. 0712345678 or 0112345678)");
+                event.preventDefault();
+            }
+        });
+    });
+</script>
+{%endblock%}
+{%endblock%}

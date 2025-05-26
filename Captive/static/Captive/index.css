@@ -1,0 +1,71 @@
+body{
+    background-color: rgba(128, 128, 128, 0.647);
+    background-size: cover;
+    background-attachment: fixed;
+    filter: saturate(0.5); 
+    transition: filter 0.3s ease; 
+}
+#pi{
+    text-align: center;
+    font-size: 25px;
+}
+#p1{
+    text-align: center;
+    font-size: 30px;
+}
+h1{
+    font-size: 50px;
+    font-style: italic;
+    font-weight: bolder;
+    font-family: 'Gill Sans', 'Gill Sans MT', 'Trebuchet MS', sans-serif;
+    text-align: center;
+}
+.planscontainer{
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    margin-top: 20px;
+    overflow-x: auto; /* Allows horizontal scrolling */
+}
+.planbox{
+    width: 150px; /* Fixed width */
+    height: 180px; /* Fixed height */
+    background-color: white;
+    border: 2px solid black;
+    border-radius: 10px;
+    text-align: center;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s;
+}
+
+.planbox:hover{
+    transform: scale(1.05);
+}
+
+.planlabel{
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.planamount{
+    font-size: 25px;
+    color: green;
+}
+
+.paybutton{
+    background-color: black;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 5px;
+    width: 100%;
+}
+.paybutton:hover{
+    background-color: green;
+}

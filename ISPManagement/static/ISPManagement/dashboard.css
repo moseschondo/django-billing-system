@@ -1,0 +1,76 @@
+body {
+  background-color: beige;
+}
+
+h1 {
+    font-style: italic;
+    font-weight: 300;
+  }
+.overlay-form {
+  position: fixed;
+  top: 120px; /* just below navbar */
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1050;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.form-box {
+  width: 400px;
+  padding: 30px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.form-box input[type="text"],
+.form-box input[type="password"],
+.form-box input[type="email"],
+.form-box select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+.hotspot{
+  background-color: rgb(196, 241, 196);
+  border-radius: 4%;
+  border: black 2px solid;
+  height:250px;
+  width: 250px;
+}
+.static{
+  background-color: rgb(167, 208, 234);
+  border-radius: 4%;
+  border: black 2px solid;
+  margin-right: 4px;
+  height: 250px;
+  width: 250px;
+}
+.pppoe{
+  background-color: rgb(233, 172, 172);
+  border-radius: 4%;
+  border: black 2px solid;
+  height: 250px;
+  width: 250px;
+}
+.total{
+  background-color: rgba(211, 211, 211, 0.747);
+  border-radius: 4%;
+  border: black 2px solid;
+  height: 250px;
+  width: 250px;
+}
+.container{
+  display: flex;
+  justify-content: space-around;
+  padding: 20px;
+  margin: 20px;
+}
+#bakc{
+  background-color: white;
+}

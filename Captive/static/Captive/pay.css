@@ -1,0 +1,11 @@
+body,html{
+    background-color: rgba(197, 196, 186, 0.38);
+    display: flex;
+    justify-content: center;
+}
+input{
+    margin-bottom: 2px;
+}
+div{
+    align-items: center;
+}

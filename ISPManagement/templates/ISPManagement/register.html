@@ -1,0 +1,31 @@
+{%extends "blueprint/main.html"%}
+{%load static%}
+{%block extra_css%}
+<link rel="icon" href="{% static 'ISPManagement/images/favicon.ico'%}" type="image/x-icon">
+<link rel="stylesheet" href="{% static 'ISPManagement/provider.css'%}">
+{%endblock%}
+{%block title%}WiFi Provider Registration{%endblock%}
+{%block content%}
+<div class="container">
+    <center><h2>ISP Register</h2></center>
+<ol>
+    <li>Make payment to the Till number:<strong> 3309370</strong></li>
+</ol> 
+<form method="POST" action="{% url 'register' %}">
+     <marquee behavior="" direction="left"  style="color: red;">If you have Paybill kindly contact: 0705175252</marquee>
+    {% csrf_token %}
+    {{form}}
+    <input type="hidden" name="mpesa" value="{{ mpesacode }}">
+    <center><input type="submit" value="Register"></center>
+</form>
+<br>
+Already have an account? <a href="{%url 'login' %}">Login here</a>
+</div>
+{% if error %}
+<script>
+    window.onload = function() {
+        alert("{{ error|escapejs }}");
+    };
+</script>
+{% endif %}
+{%endblock%}

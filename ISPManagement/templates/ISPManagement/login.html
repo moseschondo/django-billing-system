@@ -1,0 +1,35 @@
+{%extends "blueprint/main.html"%}
+
+{%load static%} 
+
+{%block extra_css%}
+<link rel="icon" href="{% static 'ISPManagement/images/favicon.ico'%}" type="image/x-icon">
+<link rel="stylesheet" href="{% static 'ISPManagement/style.css' %}">
+{%endblock%}
+
+{%block title%}Provider Login{%endblock%}
+{%block content%}
+<div class="login">
+    <center><h1 style="font-style: italic;">TEKPULSE SOFTWARES</h1></center>
+    <br>
+    <marquee behavior="" direction="left" style="color: red;">Kindly use the details you registered with if you're not registered 
+        then register first!!
+    </marquee>
+    <br>
+    <center><h2>ISP Login</h2></center>
+
+    {% if messages %}
+        {% for message in messages %}
+            <p style="color: red;">{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+
+    <form method="POST" action="{%url 'login' %}">
+        {% csrf_token %}
+        {{form.as_p}}
+        <button type="submit">Login</button>
+    </form>
+    <br>
+    <center>Don't have an account? <a href="{% url 'register'%}">Register here</a></center>
+</div>
+{%endblock%}

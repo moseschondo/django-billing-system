@@ -1,0 +1,47 @@
+{%extends "base/main.html"%}
+{%block title%}Tekpulse net{% endblock%}
+
+{% load static %}
+<link rel="icon" href="{% static 'Captive/images/favicon.ico' %}" type="image/x-icon">
+{% block extra_css%}<link rel="stylesheet" href="{% static 'Captive/index.css' %}">{%endblock%}
+
+{%block extra_js%}
+{%endblock%}
+    
+{%block content%}
+<center><h1>TEKPULSE NET</h1></center>
+<p id="p1"> Fast, Stable and Reliable Wifi</p>
+<p id="pi">Select your plan, pay and get connected automatically</p>
+<form method="POST" action="{% url 'payment_1' %}">
+    {% csrf_token %}
+    
+    
+    <div class="planscontainer">
+        {% for plan in plans %}
+        <div class="planbox">
+            <p class="planlabel">{{plan.name}}</p>
+            <p class="planamount">{{plan.price}}/=</p>
+            
+            <input type="hidden" name="plan_id" value="{{ plan.id }}">
+            <input type="hidden" name="plan_duration" value="{{ plan.duration }}">
+            <button type="submit" name="plan_info" value="{{ plan.price }}|{{ plan.duration }}"  class="paybutton">Pay Now</button>
+        </div>
+        {% endfor %}
+    </div>
+</form>
+    
+</form>
+<center><p id="pi">If you are not connected enter your <strong>Mpesa Number / M-Pesa code</strong> and you'll be connected..</p></center>
+<br>
+<form action="" method="post">
+    {%csrf_token%}
+    {% if error %}
+    <center><p style="color: red;">{{ error }}</p></center>
+    {% endif %}
+    <center><input type="text" name="connect" placeholder="254712345678/ TEX567CFG1", required=True, maxlength="10"></center>
+    <br>
+    <center><input type="submit" name="connected" value="Connect"></center> 
+</form>
+<br>
+<center style="font-weight: 20px; margin-top: 10px;">For customer care call: +254705175252</center>  
+{%endblock%}

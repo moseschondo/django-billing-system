@@ -1,0 +1,142 @@
+{% extends "blueprint/main.html"%}
+{% load static %}
+
+{% block extra_css %}
+<link rel="icon" href="{% static 'ISPManagement/images/favicon.ico' %}" type="image/x-icon">
+<link rel="stylesheet" href="{% static 'ISPManagement/dashboard.css' %}">
+{% endblock %}
+
+{%block title%}Dashboard{%endblock%}
+{% block content%}
+<center><h1>TEKPULSE SOFTWARES ISP</h1></center>
+{% if user.is_authenticated %}
+  <nav>
+    <div  class="container-fluid" id="bakc">
+      <ul class="nav nav-pills nav-fill">
+        <li class="nav-item">
+          <a class="nav-link" href="#">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{%url 'routers'%}">Routers</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Plan Type
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" onclick="showForm('static')">Static</a></li>
+            <li><a class="dropdown-item" onclick="showForm('pppoe')">PPPoE</a></li>
+          </ul>
+        </li>
+        <div id="formOverlay" class="overlay-form d-none">
+          <form id="staticForm" method="post" class="form-box d-none">
+            <center><legend>Register Static Clients</legend></center>
+            {% csrf_token %}
+            <input type="hidden" name="connection_type" value="static">
+            {{ static_form.as_p }}
+            <button type="submit" class="btn btn-primary w-100">Register</button>
+          </form>
+          
+          <form id="pppoeForm" method="post" class="form-box d-none">
+            <center><legend>Register PPPOE Clients</legend></center>
+            {% csrf_token %}
+            <input type="hidden" name="connection_type" value="pppoe">
+            {{ pppoe_form.as_p }}
+            <button type="submit" class="btn btn-primary w-100">Register</button>
+          </form>
+        </div>
+          <li class="nav-item">
+            <a class="nav-link" href="{%url 'finance'%}">Finance</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{%url 'generating'%}">Generate Voucher</a>
+          </li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="hotspot">
+      <center><h5>Active hotspot users</h5></center>
+      <br><br><br>
+      <h4><center>{{active_hotspot_users}}</center></h4>
+    </div>
+
+    <div class="static">
+      <center><h5>Active static users</h5></center>
+      <br><br><br>
+      <h4><center>{{active_static_users}}</center></h4>
+    </div>
+  
+    <div class="pppoe">
+      <center><h5>Active PPPOE users</h5></center>
+      <br><br><br>
+      <h4><center>{{active_pppoe_users}}</center></h4>
+    </div> 
+
+    <div class="total">
+      <center><h5>Total users</h5></center>
+      <br><br><br>
+      <h4><center>{{total_users}}</center></h4>
+    </div> 
+  </div>
+  <canvas id="myChart" style="width:80%; height: 350px;background-color: white;"></canvas>
+  {%block extra_js%}
+  <script>
+    function showForm(type) {
+      const overlay = document.getElementById('formOverlay');
+      const staticForm = document.getElementById('staticForm');
+      const pppoeForm = document.getElementById('pppoeForm');
+
+      // Reset
+      overlay.classList.remove('d-none');
+      staticForm.classList.add('d-none');
+      pppoeForm.classList.add('d-none');
+
+      // Show the selected one
+      if (type === 'static') {
+        staticForm.classList.remove('d-none');
+      } else if (type === 'pppoe') {
+        pppoeForm.classList.remove('d-none');
+      }
+    }
+
+    // Hide form overlay after submission
+    document.querySelectorAll("#formOverlay form").forEach(form => {
+      form.addEventListener("submit", function () {
+        setTimeout(() => {
+          document.getElementById("formOverlay").classList.add("d-none");
+          form.classList.add("d-none");
+        }, 300); // adjust delay if needed
+      });
+    });
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+  <script>
+  var xValues = ["Sunday", "Monady", "Tuesday", "Wednesday", "Thursday","Friday","Saturday"];
+  var yValues = [1500, 1400, 1600, 1400, 1600,1800,2000];
+  var barColors = ["red", "green","blue","orange","brown","black","orange"];
+
+  new Chart("myChart", {
+    type: "bar",
+    data: {
+      labels: xValues,
+      datasets: [{
+        backgroundColor: barColors,
+        data: yValues
+      }]
+    },
+  options: {
+      legend: {display: false},
+      title: {
+        display: true,
+        text: "Weekly income trend"
+      }
+    }
+  });
+  </script>
+  {%endblock%}
+{% else %}
+  <p>Please login <a href="{% url 'login' %}">login</a></p>
+{% endif %}
+{%endblock%}

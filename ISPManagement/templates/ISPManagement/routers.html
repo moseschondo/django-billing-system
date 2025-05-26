@@ -1,0 +1,32 @@
+{%extends "blueprint/main.html"%}
+{%load static%}
+{%block extra_css%}
+<link rel="stylesheet" href="{%static 'ISPManagement/routers.css'%}">
+<link rel="icon" href="{% static 'ISPManagement/images/favicon.ico' %}" type="image/x-icon">
+{%endblock%}
+{%block title%}Router Management Portal{%endblock%}
+{%block content%}
+{%if user.is_authenticated%}
+  <center><h1>Router Management Portal</h1></center>
+  <div class="container">
+    <div class="total_routers">
+      <center><h5>Total Routers</h5></center>
+      <br><br><br>
+      <h4><center>{{total_router}}</center></h4>
+    </div>
+    <div class="online">
+      <center><h5>Online Routers</h5></center>
+      <br><br><br>
+      <h4><center>{{online_routers}}</center></h4>
+    </div> 
+
+    <div class="offline">
+      <center><h5>Offline Routers</h5></center>
+      <br><br><br>
+      <h4><center>{{offline_routers}}</center></h4>
+    </div> 
+  </div>
+{% else %}
+  <p>Please login <a href="{% url 'login' %}">login</a></p>
+{% endif %}
+{%endblock%}
