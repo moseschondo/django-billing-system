@@ -31,14 +31,14 @@
 </form>
     
 </form>
-<center><p id="pi">If you are not connected enter your <strong>Mpesa Number / M-Pesa code</strong> and you'll be connected..</p></center>
+<center><p id="pi">If you are not connected enter your <strong>Mpesa Number</strong> and you'll be connected..</p></center>
 <br>
 <form action="" method="post">
     {%csrf_token%}
     {% if error %}
     <center><p style="color: red;">{{ error }}</p></center>
     {% endif %}
-    <center><input type="text" name="connect" placeholder="254712345678/ TEX567CFG1", required=True, maxlength="10"></center>
+    <center><input type="text" name="phone_connect" placeholder="254712345678" required=True, maxlength="10"></center>
     <br>
     <center><input type="submit" name="connected" value="Connect"></center> 
 </form>

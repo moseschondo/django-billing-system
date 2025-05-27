@@ -25,7 +25,8 @@ h1{
     justify-content: space-between;
     gap: 20px;
     margin-top: 20px;
-    overflow-x: auto; /* Allows horizontal scrolling */
+    overflow-x: auto; 
+    justify-content: flex-start;
 }
 .planbox{
     width: 150px; /* Fixed width */
@@ -69,3 +70,23 @@ h1{
 .paybutton:hover{
     background-color: green;
 }
+
+@media (max-width: 600px) {
+    h1 {
+        font-size: 32px;
+    }
+    #p1 {
+        font-size: 22px;
+    }
+    #pi {
+        font-size: 18px;
+    }
+    .planbox {
+        max-width: 100%; /* full width cards on small screens */
+        height: auto;    /* allow height to grow with content */
+    }
+    .planscontainer {
+        justify-content: center;
+    }
+}
+

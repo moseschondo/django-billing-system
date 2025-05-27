@@ -19,12 +19,15 @@ h1 {
 }
 
 .form-box {
-  width: 400px;
+  width: 100%;
+  max-width: 400px; /* Ensures form doesn’t exceed 400px */
   padding: 30px;
   background: white;
   border-radius: 10px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  box-sizing: border-box;
 }
+
 
 .form-box input[type="text"],
 .form-box input[type="password"],
@@ -40,16 +43,14 @@ h1 {
   background-color: rgb(196, 241, 196);
   border-radius: 4%;
   border: black 2px solid;
-  height:250px;
-  width: 250px;
+ 
 }
 .static{
   background-color: rgb(167, 208, 234);
   border-radius: 4%;
   border: black 2px solid;
   margin-right: 4px;
-  height: 250px;
-  width: 250px;
+ 
 }
 .pppoe{
   background-color: rgb(233, 172, 172);
@@ -62,15 +63,47 @@ h1 {
   background-color: rgba(211, 211, 211, 0.747);
   border-radius: 4%;
   border: black 2px solid;
-  height: 250px;
-  width: 250px;
+
 }
-.container{
+.container {
   display: flex;
-  justify-content: space-around;
+  flex-wrap: nowrap;
+  overflow-x: auto;  
+  gap: 20px;
   padding: 20px;
   margin: 20px;
 }
+
 #bakc{
   background-color: white;
 }
+.hotspot, .static, .pppoe, .total {
+  flex: 0 0 auto; /* Prevents shrinking, keeps original width */
+  width: 250px;
+  height: 250px;
+  margin: 10px;
+  border-radius: 4%;
+  border: 2px solid black;
+}
+@media (max-width: 600px) {
+  h1 {
+    font-size: 28px;
+  }
+
+  .form-box {
+    padding: 20px;
+  }
+
+  .container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .hotspot, .static, .pppoe, .total {
+    width: 90%;
+    max-width: none;
+    aspect-ratio: unset;
+    height: auto;
+  }
+}
+

@@ -1,5 +1,5 @@
 body,html{
-    background-color: rgba(197, 196, 186, 0.38);
+    background-image: url("static/images/images.jpeg");
     display: flex;
     justify-content: center;
 }
