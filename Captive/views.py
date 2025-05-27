@@ -14,6 +14,20 @@ def portal(request):
     plans = WiFiPlan.objects.all()
     return render(request, "Captive/index.html", {"plans": plans})
 
+def reconnect_subscriber(request):
+    if request.method == "POST":
+        reconnect_phone = request.method.get("phone_connect")
+        try:
+            Txn = Transaction.objects.values_list("phone_number",flat=True)
+            for number in Txn:
+                if number == format_phone_number(reconnect_phone):
+                    mtk = MikroTikAPI()
+                    mtk.reconnect_subscriber(number,plan_duration)
+                else:
+                    pass
+        except:
+            return
+            
 # Phone number formatting and validation
 def format_phone_number(phone):
     """Convert phone numbers to the required M-Pesa format (2547XXXXXXXX)."""
