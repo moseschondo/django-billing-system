@@ -157,7 +157,7 @@ def payment_view(request):
         planid = request.POST.get("planduration")
 
         try:
-            response = initiate_stk_push(phone, amount)
+            response = initiate_stk_push(request,phone, amount)
             
             if response.get("ResponseCode") == "0":
                 checkout_request_id = response["CheckoutRequestID"]
