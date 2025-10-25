@@ -144,8 +144,8 @@ def initiate_stk_push(request,phone, amount):
             "Timestamp": timestamp,
             "TransactionType": "CustomerBuyGoodsOnline",
             "Amount": amount,
-            "PartyA": providernumber, #Recipient phone number(One providers phone number!!)
-            "PartyB": mpesa_code,
+            "PartyA": 254798653043, #Recipient phone number(One providers phone number!!)
+            "PartyB": 3309370,
             "PhoneNumber": phone,
             "CallBackURL": CALLBACK_URL,
             "AccountReference": "account",

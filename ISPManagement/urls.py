@@ -8,6 +8,6 @@ urlpatterns = [
     path("generate accesscode/", views.generate_access_code, name="generating"),
     path('force-logout/', views.force_logout, name='force_logout'),
     path("dashboard/", views.dashboard, name="dashboard"),
-    path("features/", views.features, name="features"),
-    path("routers/",views.routers,name="routers"),
+    path("settings/", views.settings, name="settings"),
+    path("paymentsettings/",views.paymentsettings,name="paymentsettings"),
 ]

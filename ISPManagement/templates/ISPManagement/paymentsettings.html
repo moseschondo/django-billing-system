@@ -1,0 +1,98 @@
+{% extends 'blueprint/main.html' %}
+{% load static %}
+
+{% block title %}Payment Settings{% endblock %}
+
+{% block extra_css %}
+<link rel="icon" href="{% static 'ISPManagement/images/favicon.ico' %}" type="image/x-icon">
+<link rel="stylesheet" href="{% static 'ISPManagement/features.css' %}">
+<style>
+  .settings-card {
+    max-width: 800px;
+    margin: 2rem auto;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    padding: 2rem;
+  }
+  .form-group { margin-bottom: 1.2rem; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="settings-card">
+    <h1 class="mb-4">💳 Payment Settings</h1>
+    <form method="post">
+      {% csrf_token %}
+
+      <!-- Radio choice -->
+      <div class="form-group">
+        <label>Select Payment Type</label>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="payment_type" id="paybillOption" value="paybill" checked>
+          <label class="form-check-label" for="paybillOption">Paybill</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="payment_type" id="tillOption" value="till">
+          <label class="form-check-label" for="tillOption">Till Number</label>
+        </div>
+      </div>
+
+      <!-- Paybill Form -->
+      <div id="paybillForm">
+        <div class="form-group">
+          <label for="paybill_number">Paybill Number</label>
+          <input type="text" id="paybill_number" name="paybill_number" class="form-control" placeholder="e.g. 123456">
+        </div>
+        <div class="form-group">
+          <label for="shortcode">Business Shortcode</label>
+          <input type="text" id="shortcode" name="shortcode" class="form-control" placeholder="e.g. 654321">
+        </div>
+        <div class="form-group">
+          <label for="callback_url">Callback URL</label>
+          <input type="url" id="callback_url" name="callback_url" class="form-control" placeholder="https://example.com/callback">
+        </div>
+      </div>
+
+      <!-- Till Form -->
+      <div id="tillForm" style="display:none;">
+        <div class="form-group">
+          <label for="till_number">Till Number</label>
+          <input type="text" id="till_number" name="till_number" class="form-control" placeholder="e.g. 789012">
+        </div>
+        <div class="form-group">
+          <label for="callback_url_till">Callback URL</label>
+          <input type="url" id="callback_url_till" name="callback_url_till" class="form-control" placeholder="https://example.com/callback">
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary mt-3">Save Payment Settings</button>
+    </form>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const paybillOption = document.getElementById("paybillOption");
+    const tillOption = document.getElementById("tillOption");
+    const paybillForm = document.getElementById("paybillForm");
+    const tillForm = document.getElementById("tillForm");
+
+    function toggleForms() {
+      if (paybillOption.checked) {
+        paybillForm.style.display = "block";
+        tillForm.style.display = "none";
+      } else if (tillOption.checked) {
+        paybillForm.style.display = "none";
+        tillForm.style.display = "block";
+      }
+    }
+
+    paybillOption.addEventListener("change", toggleForms);
+    tillOption.addEventListener("change", toggleForms);
+
+    toggleForms(); // Run on page load
+  });
+</script>
+{% endblock %}

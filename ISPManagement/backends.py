@@ -59,23 +59,57 @@ def bind_router_to_portal(provider):
     api = MikroTikAPI(provider.router_ip, provider.mtk_username, provider.mtk_password)
     try:
         api.connect()
-        profiles = api.execute('/ip/hotspot/user-profile')
+        profiles = api.execute('/ip/hotspot/user/profile')
+
+        if not profiles:
+            print("❌ No hotspot profiles found on the router.")
+            return False
+
+        print(f"🔍 Found {len(profiles)} hotspot profiles:")
+        for p in profiles:
+            print(p)
+
+        updated = False
+        new_url = 'https://www.tekpulsesoftwares.com/'
 
         for profile in profiles:
-            if profile.get('name') == 'default':
-                # Only update if not already set
-                if profile.get('http-pap-login') != 'https://mybilling-27346a98580c.herokuapp.com/':
-                    api.execute('/ip/hotspot/user-profile', {
-                        '.id': profile['.id'],
-                        'http-pap-login': 'https://mybilling-27346a98580c.herokuapp.com/',
+            profile_name = profile.get('name')
+            profile_id = profile.get('.id') or profile.get('id')  # ✅ handles both cases
+
+            if not profile_id:
+                print(f"⚠️ Skipping profile '{profile_name}' — no ID found")
+                continue
+
+            current_login = profile.get('http-pap-login')
+
+            if profile_name in ['hotspot1', 'default', 'Hotspot1']:
+                if current_login != new_url:
+                    print(f"🛠 Updating profile '{profile_name}' (ID: {profile_id})...")
+                    api.execute('/ip/hotspot/user/profile', {
+                        '.id': profile_id,
+                        'http-pap-login': new_url,
                         'login-by': 'http-pap',
                     })
+                    print(f"✅ Updated login URL for profile: {profile_name}")
+                else:
+                    print(f"ℹ️ Login URL for {profile_name} already correct.")
+                updated = True
                 break
+
+        if not updated:
+            print("⚠️ No matching hotspot profile ('hotspot1' or 'default') found.")
+            return False
+
         return True
+
     except Exception as e:
-        print(f"Error binding router: {e}")
+        print(f"[Router Binding Error] {e}")
         return False
     finally:
         api.disconnect()
+
+
+
+
 
 

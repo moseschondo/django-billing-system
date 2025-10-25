@@ -1,5 +1,5 @@
 body{
-    background-color: rgba(128, 128, 128, 0.647);
+    background-color: url("/images/images.jpeg");
     background-size: cover;
     background-attachment: fixed;
     filter: saturate(0.5); 

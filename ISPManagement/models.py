@@ -92,3 +92,8 @@ class PPPoEClients(models.Model):
 
     def __str__(self):
         return f"{self.username} {self.password}"
+
+class administarator(models.Model):
+    username = models.CharField(max_length=50)
+    password = models.CharField(max_length=100)
+    

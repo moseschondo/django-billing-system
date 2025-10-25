@@ -1,16 +1,15 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.models import User
-from ISPManagement.models import WiFiProviders,StaticClient
+from ISPManagement.models import WiFiProviders,StaticClient, PPPoEClients
 from ISPManagement.forms import Customer_reg_form,login_form,StaticForm, PPPoEForm
 from django.contrib import messages
 import random, string
 from ISPManagement.backends import bind_router_to_portal
 from Captive.mikrotik import MikroTikAPI
 from django.contrib.auth.decorators import login_required
-
-
-
+from Captive.models import Transaction, Subscribers
+from routeros_api import RouterOsApiPool
 
 def register_provider(request):
     if request.method == "POST":
@@ -71,10 +70,9 @@ def provider_login(request):
 
     return render(request, "ISPManagement/login.html", {"form": form})
 
-@login_required
 def finance(request):
-    provider_details = WiFiProviders.objects.all(user = request.user)
-    return render(request, 'ISPManagement/finance.html/', {'provider_details': provider_details})
+    transaction_data = Transaction.objects.all()
+    return render(request, 'ISPManagement/finance.html/', {"transactions_data": transaction_data})
 
 @login_required
 def generate_access_code(request):
@@ -90,50 +88,59 @@ def force_logout(request):
     logout(request)
     return redirect('/admin/')
 
-@login_required
 def dashboard(request):
-    static_form = StaticForm()
-    pppoe_form = PPPoEForm()
+    ispdetails = WiFiProviders.objects.all()
+    for details in ispdetails:
+    # --- Connect to MikroTik ---
+        api_pool = RouterOsApiPool(
+            host=details.router_ip,  
+            username=details.mtk_username,        
+            password=details.mtk_password, 
+            port=8728,
+            plaintext_login=True
+        )
+    api = api_pool.get_api()
 
-    try:
-        provider = WiFiProviders.objects.get(user=request.user)
-        counter = MikroTikAPI(provider)  # move inside try
+    # --- System info ---
+    system_resource = api.get_resource('/system/resource').get()[0]
+    identity = api.get_resource('/system/identity').get()[0]
 
-        active_hotspot_users = counter.total_hotspot_users()
-        active_static_users = counter.total_static_users()
-        active_pppoe_users = counter.total_pppoe_users()
-        counter.close()
+    free_mem_mb = round(int(system_resource.get("free-memory", 0)) / (1024 * 1024), 2)
+    total_mem_mb = round(int(system_resource.get("total-memory", 0)) / (1024 * 1024), 2)
 
-    except Exception as e:
-        print(f"MikroTik connection failed: {e}")
-        active_hotspot_users = active_static_users = active_pppoe_users = 0
-        total_users = 0
+    # --- Client counts ---
+    hotspot_clients = api.get_resource('/ip/hotspot/active').get()
+    pppoe_clients = api.get_resource('/ppp/active').get()
+    dhcp_clients = api.get_resource('/ip/dhcp-server/lease').get()
 
-        # Optional: show a warning in the UI using Django messages
-        messages.error(request, "Error check if your router is active")
-        return redirect("login")
+    total_clients = len(hotspot_clients) + len(pppoe_clients) + len(dhcp_clients)
 
+    api_pool.disconnect()
 
-    total_users = active_pppoe_users + active_static_users + active_hotspot_users
-
-    return render(request, 'ISPManagement/clients.html', {
-        'active_hotspot_users': active_hotspot_users,
-        'active_static_users': active_static_users,
-        'active_pppoe_users': active_pppoe_users,
-        'total_users': total_users,
-        'static_form': static_form,
-        'pppoe_form': pppoe_form,
-    })
+    context = {
+        "router_info": {
+            "identity": identity.get("name"),
+            "uptime": system_resource.get("uptime"),
+            "cpu_load": system_resource.get("cpu-load"),
+            "free_memory": free_mem_mb,
+            "total_memory": total_mem_mb,
+            "version": system_resource.get("version"),
+        },
+        "hotspot_count": len(hotspot_clients),
+        "pppoe_count": len(pppoe_clients),
+        "static_count": len(dhcp_clients),
+        "total_clients": total_clients,
+    }
+    return render(request, "ISPManagement/clients.html", context)
 
 @login_required
-def features(request):
-    return render(request,"ISPManagement/features.html/")
+def settings(request):
+    return render(request,"ISPManagement/settings.html/")
+
+def paymentsettings(request):
+    return render(request,"ISPManagement/paymentsettings.html")
 
 @login_required
-def routers(request):
-    return render(request,"ISPManagement/routers.html")
-
-
 def register_static_client(request):
     if request.method == 'POST':
         form = StaticForm(request.POST)
@@ -165,7 +172,7 @@ def register_static_client(request):
 
     return render(request, 'ISPManagement/register_static.html', {'form': form})
 
-        
+@login_required        
 def register_pppoe_client(request):
     if request.method == "POST":
         form = PPPoEForm(request.POST)

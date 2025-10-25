@@ -4,31 +4,35 @@
 <link rel="icon" href="{% static 'ISPManagement/images/favicon.ico' %}" type="image/x-icon">
 <link rel="stylesheet" href="{% static 'ISPManagement/provider.css' %}">
 {%endblock%}
-{%block titlle%}Generate Access Code{%endblock%}
-{%block content%}
-<div>
-    <h1>Generate Voucher Code</h1>
-<form method="POST" action="{% url 'generating' %}">
-    {% csrf_token %}
-    <label for="subscriber_phone">Subscriber Phone (Optional):</label>
-    <input type="text" id="subscriber_phone" name="subscriber_phone" placeholder="Enter phone number"><br><br>
-    <label for="duration">Select Duration:</label>
-    <select id="duration" name="duration">
-        <option value="1hr Unlimited">1hr Unlimited</option>
-        <option value="3hrs Unlimited">3hrs Unlimited</option>
-        <option value="6hrs Unlimited">6hrs Unlimited</option>
-        <option value="12hrs Unlimited">12hrs Unlimited</option>
-        <option value="24hrs Unlimited">24hrs Unlimited</option>
-        <option value="3 Days Unlimited">3 Days Unlimited</option>
-        <option value="7 Days Unlimited">7 Days Unlimited</option>
-        <option value="1 Month Unlimited">1 Month Unlimited</option>
-    </select><br><br>
-    {% if code %}
-    <h2>Generated Access Code: <input type="text" value="{{ code }}"></h2>
-    <p>Expires at: {{ expiry_time }}</p>
-    {% endif %}
-    <button type="submit">Generate</button>
-</form>
-</div>
+{%if user.is_authenticated%}
+    {%block title%}Generate Access Code{%endblock%}
+    {%block content%}
+    <div>
+        <h1>Generate Voucher Code</h1>
+    <form method="POST" action="{% url 'generating' %}">
+        {% csrf_token %}
+        <label for="subscriber_phone">Subscriber Phone (Optional):</label>
+        <input type="text" id="subscriber_phone" name="subscriber_phone" placeholder="Enter phone number"><br><br>
+        <label for="duration">Select Duration:</label>
+        <select id="duration" name="duration">
+            <option value="1hr Unlimited">1hr Unlimited</option>
+            <option value="3hrs Unlimited">3hrs Unlimited</option>
+            <option value="6hrs Unlimited">6hrs Unlimited</option>
+            <option value="12hrs Unlimited">12hrs Unlimited</option>
+            <option value="24hrs Unlimited">24hrs Unlimited</option>
+            <option value="3 Days Unlimited">3 Days Unlimited</option>
+            <option value="7 Days Unlimited">7 Days Unlimited</option>
+            <option value="1 Month Unlimited">1 Month Unlimited</option>
+        </select><br><br>
+        {% if code %}
+        <h2>Generated Access Code: <input type="text" value="{{ code }}"></h2>
+        <p>Expires at: {{ expiry_time }}</p>
+        {% endif %}
+        <button type="submit">Generate</button>
+    </form>
+    </div>
+{%else%}
+<a href="{%url 'login'%}"></a>
+{%endif%}
 {%endblock%}
 

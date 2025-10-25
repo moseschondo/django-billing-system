@@ -1,0 +1,84 @@
+{% extends 'blueprint/main.html' %}
+{% load static %}
+
+{% block title %}General Settings{% endblock %}
+
+{% block extra_css %}
+<link rel="icon" href="{% static 'ISPManagement/images/favicon.ico' %}" type="image/x-icon">
+<link rel="stylesheet" href="{% static 'ISPManagement/features.css' %}">
+<style>
+  .settings-card {
+    max-width: 800px;
+    margin: 2rem auto;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    padding: 2rem;
+  }
+  .form-group { margin-bottom: 1.2rem; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="settings-card">
+    <h1 class="mb-4">⚙️ General Settings</h1>
+    <form method="post">
+      {% csrf_token %}
+
+      <div class="form-group">
+        <label for="provider_name">Provider Name</label>
+        <input type="text" id="provider_name" name="provider_name" class="form-control" placeholder="e.g. Tekpulse WiFi">
+      </div>
+
+      <div class="form-group">
+        <label for="phone">Support Phone</label>
+        <input type="text" id="phone" name="phone" class="form-control" placeholder="e.g. +254700000000">
+      </div>
+
+      <div class="form-group">
+        <label for="router_ip">Router IP</label>
+        <input type="text" id="router_ip" name="router_ip" class="form-control" placeholder="e.g. 192.168.88.1">
+      </div>
+
+      <div class="form-group">
+        <label for="router_user">MikroTik Username</label>
+        <input type="text" id="router_user" name="router_user" class="form-control" placeholder="admin">
+      </div>
+
+      <div class="form-group">
+        <label for="router_pass">MikroTik Password</label>
+        <input type="password" id="router_pass" name="router_pass" class="form-control">
+      </div>
+
+      <div class="form-group">
+        <label for="currency">Currency</label>
+        <select id="currency" name="currency" class="form-control">
+          <option value="KES">Ksh</option>
+          <option value="USD">USD</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="timezone">Timezone</label>
+        <select id="timezone" name="timezone" class="form-control">
+          <option>Africa/Nairobi</option>
+          <option>UTC</option>
+          <option>Europe/London</option>
+          <option>America/New_York</option>
+        </select>
+      </div>
+      {% comment %} plans section {% endcomment %}
+      <section>
+        <label for="planssetting">Plans Settings</label>
+        <select>
+          <option>Static plans</option>
+          <option>PPOE plans</option>
+          <option>Hotspot plans</option>
+        </select>
+      </section>
+
+      <button type="submit" class="btn btn-primary mt-3">Save General Settings</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

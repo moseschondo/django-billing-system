@@ -8,7 +8,6 @@
 {%endblock%}
 
 {%block content%}
-{%if user.is_authenticated %}
   <center><h1>ISP YEARLY FINANCIAL REPORT </h1></center>
   <canvas id="myChart" style="width:100%; height: 400px;background-color: white;"></canvas>
     {% block extra_js %}
@@ -37,9 +36,6 @@
   });
   </script>
   </center>
-{% else %}
-  <p>Please login <a href="{% url 'login' %}">login</a></p>
-{% endif %}
 {%endblock%}
 {%endblock%}
 

@@ -23,7 +23,7 @@ input[type="submit"],
 input[type="password"],
 input[type="tel"],
 button {
-    width: 100%;
+    width: 80%;
     padding: 10px;
     margin: 8px 0;
     border: 1px solid #ccc;
@@ -32,12 +32,13 @@ button {
 }
 
 /* Button Styling */
-button {
+#button {
     background-color: #007BFF;
     color: white;
     border: none;
     cursor: pointer;
     font-weight: bold;
+    display: inline;
 }
 
 button:hover {
